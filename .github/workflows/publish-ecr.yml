@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  uses: aws-actions/configure-aws-credentials@v5
 
 concurrency:
   group: publish-ecr-main
