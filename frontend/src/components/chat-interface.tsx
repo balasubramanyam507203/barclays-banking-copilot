@@ -225,7 +225,13 @@ export default function ChatInterface() {
     }, []);
 
   useEffect(() => {
-    void loadConversationHistory();
+    const timeoutId = window.setTimeout(() => {
+      void loadConversationHistory();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [loadConversationHistory]);
 
   useEffect(() => {
