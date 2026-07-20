@@ -1,0 +1,210 @@
+.loginPage,
+.sessionLoadingPage {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      circle at top left,
+      #153b65,
+      #071f3d 55%,
+      #041629
+    );
+}
+
+.loginCard {
+  width: min(430px, 100%);
+  padding: 34px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow:
+    0 28px 70px
+    rgba(0, 0, 0, 0.28);
+}
+
+.loginBrandMark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  margin-bottom: 22px;
+  border-radius: 15px;
+  background: #071f3d;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.loginEyebrow {
+  margin: 0 0 7px;
+  color: #0066cc;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.loginCard h1 {
+  margin: 0;
+  color: #071f3d;
+  font-size: 1.8rem;
+}
+
+.loginDescription {
+  margin: 11px 0 26px;
+  color: #607086;
+  line-height: 1.6;
+}
+
+.loginForm {
+  display: grid;
+  gap: 10px;
+}
+
+.loginForm label {
+  margin-top: 7px;
+  color: #27384b;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.loginForm select,
+.loginForm input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #c4cfdb;
+  border-radius: 10px;
+  background: white;
+  color: #172536;
+  outline: none;
+}
+
+.loginForm select:focus,
+.loginForm input:focus {
+  border-color: #0066cc;
+  box-shadow:
+    0 0 0 3px
+    rgba(0, 102, 204, 0.12);
+}
+
+.loginForm button {
+  margin-top: 13px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #0066cc;
+  color: white;
+  font-weight: 800;
+}
+
+.loginForm button:hover:not(:disabled) {
+  background: #0055aa;
+}
+
+.loginForm button:disabled {
+  background: #aebdca;
+}
+
+.loginError {
+  margin-top: 7px;
+  padding: 11px 13px;
+  border: 1px solid #efb0aa;
+  border-radius: 9px;
+  background: #fff0ee;
+  color: #b42318;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.loginNotice {
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid #d8e0e9;
+  color: #77869a;
+  font-size: 0.73rem;
+  line-height: 1.55;
+}
+
+.sessionLoadingPage {
+  display: flex;
+  gap: 12px;
+  color: white;
+}
+
+.authenticatedApplication
+  .accessCard,
+.authenticatedApplication
+  .sidebarInfo {
+  display: none;
+}
+
+.authenticatedSession {
+  position: fixed;
+  z-index: 50;
+  left: 22px;
+  bottom: 24px;
+  display: grid;
+  gap: 12px;
+  width: 236px;
+  padding: 15px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background:
+    rgba(255, 255, 255, 0.09);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.authenticatedSession div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.authenticatedSession strong,
+.authenticatedSession span {
+  overflow-wrap: anywhere;
+}
+
+.authenticatedSession strong {
+  font-size: 0.82rem;
+}
+
+.authenticatedSession span {
+  color: #b7cee5;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.authenticatedSession button {
+  padding: 8px 10px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background:
+    rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.authenticatedSession button:hover {
+  background:
+    rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 900px) {
+  .authenticatedSession {
+    right: 14px;
+    bottom: 105px;
+    left: auto;
+    width: min(250px, calc(100vw - 28px));
+    border-color: #c4cfdb;
+    background:
+      rgba(7, 31, 61, 0.96);
+  }
+}
