@@ -1,0 +1,29 @@
+Document ID: PAY-POL-1042
+Title: International Payment Review Policy
+Version: 7.2
+Status: ACTIVE
+Effective Date: 2026-04-01
+Department: Payments Compliance
+Region: US
+Classification: Internal Confidential
+Allowed Roles: payments_analyst, compliance_analyst
+
+Section 1: Purpose
+
+This policy defines the review requirements for international payments initiated by corporate customers.
+
+Section 2: Standard Verification
+
+Employees must verify the customer's identity, account status, beneficiary information, transfer amount, destination country, and payment purpose before processing an international payment.
+
+Section 3: Enhanced Review
+
+Enhanced review is required when the transfer amount exceeds 10000 USD, when the destination country is classified as high risk, when the beneficiary information is incomplete, or when unusual transaction activity is detected.
+
+Section 4: Escalation
+
+Payments requiring enhanced review must be escalated to a compliance analyst. The payment must not be approved until the compliance review is completed.
+
+Section 5: Record Retention
+
+The payment-review records and supporting documentation must be retained for seven years.

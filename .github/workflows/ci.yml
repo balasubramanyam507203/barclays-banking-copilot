@@ -1,0 +1,162 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: >-
+    ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-tests:
+    name: Backend tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      APP_ENVIRONMENT: test
+      DATABASE_URL: >-
+        sqlite:///local_data/ci_policy_copilot.db
+      DATABASE_AUTO_CREATE_SCHEMA: "true"
+      DATABASE_ECHO: "false"
+      CACHE_ENABLED: "false"
+      OTEL_ENABLED: "false"
+      AUTH_MODE: local_jwt
+      LOCAL_JWT_SECRET: >-
+        ci-only-secret-not-used-in-production
+      LOCAL_AUTH_PASSWORD: ci-test-password
+      PYTHONPATH: ${{ github.workspace }}/backend
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: >-
+            backend/requirements.txt
+
+      - name: Upgrade package tools
+        run: |
+          python -m pip install \
+            --upgrade \
+            pip \
+            setuptools \
+            wheel
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install \
+            -r requirements.txt
+
+      - name: Run Alembic migration test
+        run: |
+          python -m pytest \
+            tests/test_database_migrations.py \
+            -v
+
+      - name: Run backend test suite
+        run: |
+          python -m pytest
+
+  frontend-quality:
+    name: Frontend lint and build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_API_BASE_URL: >-
+        http://127.0.0.1:8000/api/v1
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: >-
+            frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build Next.js frontend
+        run: npm run build
+
+  backend-container-build:
+    name: Build backend container
+    runs-on: ubuntu-latest
+    needs:
+      - backend-tests
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: false
+          tags: >-
+            enterprise-banking-policy-copilot-backend:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  frontend-container-build:
+    name: Build frontend container
+    runs-on: ubuntu-latest
+    needs:
+      - frontend-quality
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: frontend/Dockerfile
+          push: false
+          tags: >-
+            enterprise-banking-policy-copilot-frontend:ci
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000/api/v1
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

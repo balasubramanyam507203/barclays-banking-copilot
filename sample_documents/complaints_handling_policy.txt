@@ -1,0 +1,33 @@
+Document ID: CMP-POL-3015
+Title: Customer Complaints Handling Policy
+Version: 3.5
+Status: ACTIVE
+Effective Date: 2026-03-10
+Department: Customer Operations
+Region: US
+Classification: Internal
+Allowed Roles: customer_support, operations_analyst
+
+Section 1: Purpose
+
+This policy defines the process for receiving, investigating, and resolving customer complaints.
+
+Section 2: Complaint Registration
+
+Every complaint must be assigned a complaint reference number and recorded with the customer name, contact information, complaint category, date received, and responsible department.
+
+Section 3: Acknowledgement
+
+The customer must receive an acknowledgement within two business days after the complaint is registered.
+
+Section 4: Investigation
+
+The responsible employee must review the customer communication, transaction history, supporting documents, and applicable policies.
+
+Section 5: Resolution
+
+The complaint should normally be resolved within fifteen business days. If additional investigation is required, the customer must receive a status update.
+
+Section 6: Escalation
+
+Complaints involving fraud, discrimination, regulatory concerns, or potential legal action must be escalated to the appropriate risk or compliance team.

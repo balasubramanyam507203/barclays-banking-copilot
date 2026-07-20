@@ -1,0 +1,41 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+.DS_Store# Step 25 local Docker secrets and generated configuration
+.env.docker
+.docker-secrets/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+!backend/.env.example
+backend/.env
+backend/backend/.env
+frontend/.env.local
+.env.docker
+.docker-secrets/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Next.js
+frontend/node_modules/
+frontend/.next/
+
+# Local application data
+backend/local_data/
+backend/local_indexes/
+evaluation/reports/
+
+# macOS
+.DS_Store
+
+# Temporary lesson files
+step*_current_files.txt
+backend/step*_current_files.txt
+!.env.docker.example

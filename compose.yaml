@@ -1,0 +1,141 @@
+name: enterprise-banking-policy-copilot
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-policy_copilot}
+      POSTGRES_USER: ${POSTGRES_USER:-policy_copilot}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-policy_copilot} -d ${POSTGRES_DB:-policy_copilot}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    networks:
+      - copilot_network
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--save",
+        "60",
+        "1",
+      ]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    networks:
+      - copilot_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      APP_ENVIRONMENT: docker
+      API_CORS_ORIGINS: >-
+        http://localhost:3000,http://127.0.0.1:3000
+      DATABASE_URL: >-
+        postgresql+psycopg://${POSTGRES_USER:-policy_copilot}:${POSTGRES_PASSWORD_URL}@postgres:5432/${POSTGRES_DB:-policy_copilot}
+      DATABASE_AUTO_CREATE_SCHEMA: "false"
+      DATABASE_APPLICATION_NAME: >-
+        enterprise-banking-policy-copilot-docker
+      CACHE_ENABLED: "true"
+      REDIS_URL: redis://redis:6379/0
+      OTEL_ENABLED: "false"
+      HF_HOME: /home/appuser/.cache/huggingface
+      BUILD_INDEX_ON_STARTUP: ${BUILD_INDEX_ON_STARTUP:-true}
+      FORCE_REBUILD_INDEX: ${FORCE_REBUILD_INDEX:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - faiss_index_data:/workspace/backend/local_indexes
+      - hf_cache:/home/appuser/.cache/huggingface
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "http://127.0.0.1:8000/api/v1/health/ready",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+    networks:
+      - copilot_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: >-
+          ${NEXT_PUBLIC_API_BASE_URL:-http://127.0.0.1:8000/api/v1}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - copilot_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  faiss_index_data:
+  hf_cache:
+
+networks:
+  copilot_network:
+    driver: bridge
+
+secrets:
+  postgres_password:
+    file: ./.docker-secrets/postgres_password

@@ -1,0 +1,29 @@
+Document ID: KYC-POL-2031
+Title: Customer Identity Verification Policy
+Version: 4.1
+Status: ACTIVE
+Effective Date: 2026-02-15
+Department: Customer Compliance
+Region: US
+Classification: Internal Confidential
+Allowed Roles: customer_support, compliance_analyst
+
+Section 1: Purpose
+
+This policy describes the minimum customer identity verification requirements.
+
+Section 2: Individual Customers
+
+Employees must verify the customer's full legal name, date of birth, residential address, and an approved government-issued identification document.
+
+Section 3: Corporate Customers
+
+For corporate customers, employees must verify the registered business name, business address, registration number, authorized representatives, and beneficial owners.
+
+Section 4: Failed Verification
+
+If the identity information cannot be verified, the employee must not complete the requested account activity. The case must be escalated to the compliance team.
+
+Section 5: Sensitive Information
+
+Customer identification information must not be copied into ordinary application logs or shared with unauthorized employees.

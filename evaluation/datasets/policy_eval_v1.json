@@ -1,0 +1,83 @@
+{
+  "dataset_name": "Enterprise Banking Policy Copilot Evaluation",
+  "version": "1.0.0",
+  "description": "Initial retrieval, citation, grounding and abstention evaluation dataset.",
+  "thresholds": {
+    "retrieval_top_k": 5,
+    "minimum_retrieval_recall": 1.0,
+    "minimum_citation_precision": 1.0,
+    "minimum_citation_recall": 1.0,
+    "minimum_fact_coverage": 1.0,
+    "expected_phrase_token_match": 0.8,
+    "require_guardrails": true
+  },
+  "cases": [
+    {
+      "case_id": "kyc_identity_verification",
+      "question": "What customer identity verification is required?",
+      "should_abstain": false,
+      "expected_document_ids": [
+        "KYC-POL-2031"
+      ],
+      "expected_answer_phrases": [
+        "customer identity",
+        "verification"
+      ],
+      "forbidden_answer_phrases": [
+        "verification is optional"
+      ],
+      "access": {
+        "role": "compliance_analyst",
+        "region": "US",
+        "clearance_rank": 2
+      },
+      "tags": [
+        "kyc",
+        "retrieval",
+        "grounding"
+      ]
+    },
+    {
+      "case_id": "complaints_handling",
+      "question": "How should a customer complaint be handled?",
+      "should_abstain": false,
+      "expected_document_ids": [
+        "CMP-POL-3015"
+      ],
+      "expected_answer_phrases": [
+        "complaint"
+      ],
+      "forbidden_answer_phrases": [
+        "complaints can be ignored"
+      ],
+      "access": {
+        "role": "customer_support",
+        "region": "US",
+        "clearance_rank": 1
+      },
+      "tags": [
+        "complaints",
+        "customer-support"
+      ]
+    },
+    {
+      "case_id": "transactional_balance_abstention",
+      "question": "What is the current balance of my checking account?",
+      "should_abstain": true,
+      "expected_document_ids": [],
+      "expected_answer_phrases": [],
+      "forbidden_answer_phrases": [
+        "your current balance is"
+      ],
+      "access": {
+        "role": "compliance_analyst",
+        "region": "US",
+        "clearance_rank": 2
+      },
+      "tags": [
+        "abstention",
+        "transactional-data"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Step 22: structured logging and observability
+API_SERVICE_NAME=enterprise-banking-policy-copilot
+OBSERVABILITY_LOG_LEVEL=INFO
+OBSERVABILITY_LOG_FORMAT=json
+OTEL_ENABLED=true
+OTEL_CONSOLE_EXPORTER=false
+OTEL_EXPORTER_OTLP_ENDPOINT=
+OTEL_PYTHON_FASTAPI_EXCLUDED_URLS=/api/v1/health/live,/api/v1/health/ready
+OTEL_METRIC_EXPORT_INTERVAL_MS=60000
