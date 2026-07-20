@@ -12,7 +12,6 @@ on:
 permissions:
   contents: read
   id-token: write
-  uses: aws-actions/configure-aws-credentials@v5
 
 concurrency:
   group: publish-ecr-main
@@ -52,8 +51,8 @@ jobs:
         id: image
         shell: bash
         run: |
-          SHORT_SHA="${GITHUB_SHA::12}"
-
+          SHORT_SHA="${{ github.event.workflow_run.head_sha }}"
+          SHORT_SHA="${SHORT_SHA::12}"
           echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
           echo "registry=${{ steps.login-ecr.outputs.registry }}" >> "$GITHUB_OUTPUT"
 
